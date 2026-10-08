@@ -1,0 +1,35 @@
+# FUN-45 · Add-on "R5 Hub" de Revolution5 (latido de la casa y reenvío de eventos con cola para
+# los cortes; después, modo local).
+#
+# Este archivo es la fuente: el repo PÚBLICO `r5-addons` lleva una copia en `r5_hub/config.yaml`
+# (el Supervisor lee de ahí qué imagen bajar). Al subir `version` acá, el workflow
+# `.github/workflows/addon-r5-hub.yml` publica la imagen nueva en GHCR y después se copia este
+# archivo al repo público — sin esa copia ninguna raspy ve la actualización.
+name: R5 Hub
+version: "0.2.0"
+slug: r5_hub
+description: Mantiene la casa conectada con Revolution5 (latido cada 60 s) y reenvía los eventos de la casa, guardándolos durante un corte.
+url: https://www.revolution5.app
+arch:
+  - aarch64
+  - amd64
+# Imagen precompilada en GHCR pública (decisión FacuN 2026-10-04). {arch} lo reemplaza el Supervisor.
+image: ghcr.io/fenogueira/{arch}-addon-r5-hub
+init: false
+startup: services
+boot: auto
+# SUPERVISOR_TOKEN con el rol MÍNIMO: `default` solo permite los endpoints `/<algo>/info`
+# (versión de HA, add-ons con su estado y Vigilancia, arranque del host, lista de backups).
+# No puede reiniciar, instalar ni borrar nada. Nunca `manager` ni `admin`.
+hassio_api: true
+hassio_role: default
+# FUN-77 · Sin `ports:` a propósito: el listener de eventos (puerto 8099, `src/servidor.mjs`) NO se
+# mapea al host. Solo lo alcanza HA Core por la red interna de HA OS, con el hostname del add-on
+# (lo imprime el log de arranque; es la URL del `rest_command.r5_evento` de la casa, ver
+# management/referencia/provisioning.md §2).
+options:
+  token: ""
+  url_base: https://www.revolution5.app
+schema:
+  token: password
+  url_base: url

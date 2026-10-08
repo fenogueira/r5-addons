@@ -1,0 +1,5 @@
+# FUN-45 · Raíz del repo PÚBLICO `r5-addons` (el que se agrega en HA → Tienda de add-ons →
+# Repositorios). Se copia tal cual allá, junto con `r5-hub/config.yaml` como `r5_hub/config.yaml`.
+name: Revolution5
+url: https://www.revolution5.app
+maintainer: Revolution5
